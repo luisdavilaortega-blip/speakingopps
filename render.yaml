@@ -14,7 +14,7 @@ services:
   - type: cron
     name: speaking-opportunity-finder-scraper
     env: python
-    plan: free
+  
     schedule: "0 */12 * * *"
     buildCommand: pip install -r requirements.txt
     startCommand: python scrape.py
