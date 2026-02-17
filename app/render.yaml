@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: speaking-opportunity-finder-web
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: speaking-opportunity-finder-db
+          property: connectionString
+
+  - type: cron
+    name: speaking-opportunity-finder-scraper
+    env: python
+    plan: free
+    schedule: "0 */12 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scrape.py
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: speaking-opportunity-finder-db
+          property: connectionString
+
+databases:
+  - name: speaking-opportunity-finder-db
+    plan: free
